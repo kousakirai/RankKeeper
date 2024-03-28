@@ -1,0 +1,14 @@
+name: Docker Compose Up
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  up:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v3
+
+      - run: docker compose up --build -d
