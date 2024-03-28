@@ -11,4 +11,4 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Checkout And Build
-        run: docker compose up --build -d docker-compose.yaml --env-file .env up -d
+        run: docker compose up --build -d docker-compose.yaml up -d
