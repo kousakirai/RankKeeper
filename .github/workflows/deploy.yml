@@ -9,6 +9,15 @@ jobs:
   up:
     runs-on: self-hosted
     steps:
-      - uses: actions/checkout@v3
+      - name: Create dot env file
+        shell: bash
+        run: |
+          touch .env
+          echo "BOT_TOKEN=${{ secrets.BOT_TOKEN }}" >> .env
+          echo "MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}" >> .env
+          echo "MYSQL_USER=${{ secrets.MYSQL_USER }}" >> .env
+          echo "MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}" >> .env
+          echo "MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }}" >> .env
+          echo "GUILD_ID=${{ secrets.GUILD_ID }}" >> .env
       - name: Checkout And Build
         run: docker compose up --build -d docker-compose.yaml up -d
