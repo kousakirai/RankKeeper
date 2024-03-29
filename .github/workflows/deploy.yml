@@ -20,4 +20,5 @@ jobs:
           echo "MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }}" >> .env
           echo "GUILD_ID=${{ secrets.GUILD_ID }}" >> .env
       - name: Checkout And Build
-        run: docker compose up --build -d docker-compose.yaml up -d
+        run: |
+          docker compose up
