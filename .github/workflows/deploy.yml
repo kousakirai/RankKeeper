@@ -33,4 +33,4 @@ jobs:
           echo "GUILD_ID=${{ secrets.GUILD_ID }}" >> .env
       - name: Setup container
         run: |
-          docker compose 
+          docker compose up
