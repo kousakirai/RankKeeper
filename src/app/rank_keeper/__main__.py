@@ -1,13 +1,15 @@
 import asyncio
 from dotenv import load_dotenv
-from rank_keeper.core.core import RankKeeperCore
+from rank_keeper.core.core import RKCore
 import os
 import discord
+from logging import basicConfig, INFO
 
+basicConfig(level=INFO)
 
-bot = RankKeeperCore(
+bot = RKCore(
     token=os.environ['BOT_TOKEN'],
-    prefix=None,
+    prefix='-',
     intents=discord.Intents.all()
 )
 

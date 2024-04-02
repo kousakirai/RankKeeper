@@ -27,25 +27,12 @@ class VoiceGenerator:
     _create_queryで音声合成に必要なクエリを文字列から生成する。
     それをgenerate_voiceに渡すことで音声が生成される。
     """
-    def __init__(self, url: str):
+    def __init__(self, url: str, valid_speakers: dict):
         self.base_url = url
-        self.valid_speakers: dict = None
-        loop = asyncio.get_runnning_loop()
-        loop.run_in_executor(None, self._get_speakers)
+        self.valid_speakers: dict = valid_speakers
 
-
-    async def _get_speakers(self) -> list:
-        """
-        get_speakersはVoicevox上で使用可能な話者のSpeakerクラスのリストを返す。
-        """
-        async with aiohttp.ClientSession() as session:
-            async with session.get(self.base_url + "/speakers") as response:
-                for speaker in await response.json():
-                    self.valid_speakers[speaker["name"]] = Speaker(speaker["name"], speaker["styles"])
 
     async def get_speakers(self) -> dict:
-        if self.valid_speakers is None:
-            await self._get_speakers()
         return self.valid_speakers.keys()
 
     async def _create_query(self, text: str, speaker: Speaker) -> dict:
@@ -61,6 +48,17 @@ class VoiceGenerator:
         headers = {"Content-Type": "application/json"}
         data, params = await self._create_query(text, speaker)
         async with aiohttp.ClientSession() as session:
-            async with session.post(self.base_url + "/synthesis", json=await self._create_query(text, speaker), headers=headers) as response:
-                return discord.FFmpegAudio(await response.read())
 
+            async with session.post(self.base_url + "/synthesis", json=await self._create_query(text, speaker), headers=headers) as response:
+
+                return await response.read()
+
+    @classmethod
+    async def init(cls, url) -> tuple[str, dict[str, Speaker]]:
+        valid_speakers = {}
+        async with aiohttp.ClientSession() as session:
+            async with session.get(f'{url}/speakers') as response:
+                for speaker in await response.json():
+                    valid_speakers[speaker["name"]] = Speaker(speaker["name"], speaker["styles"])
+
+        return url, valid_speakers

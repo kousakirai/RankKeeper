@@ -1,12 +1,17 @@
 import os
 import asyncio
 from aiomysql.sa import create_engine
+from logging import getLogger
+
+
+LOG = getLogger(__name__)
 
 
 class DB:
     async def __aenter__(self, loop=None):
         if loop is None:
             loop = asyncio.get_event_loop()
+        LOG.info('Connecting to MySQL...')
         engine = await create_engine(
             user=os.environ["MYSQL_USER"],
             db=os.environ["MYSQL_DATABASE"],
@@ -18,6 +23,7 @@ class DB:
             loop=loop
         )
         self._connection = await engine.acquire()
+        LOG.info('Connected to MySQL.')
         return self
 
     async def __aexit__(self, *args, **kwargs):

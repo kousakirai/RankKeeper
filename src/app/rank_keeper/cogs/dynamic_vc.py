@@ -1,5 +1,5 @@
 from discord.ext import commands
-from discord import ui, app_commands, ButtonStyle, Interaction
+from discord import ui, app_commands, ButtonStyle, Interaction, Member, VoiceState
 
 
 class CasualEntryView(ui.View):
@@ -24,18 +24,19 @@ class DynamicVC(commands.Cog):
         self.bot = bot
 
     @commands.Cog.listener()
-    async def on_voice_state_update(member, before, after):
+    async def on_voice_state_update(self, member: Member, before: VoiceState, after: VoiceState):
         # ユーザーがボイスチャンネルに参加した場合
-        if before.channel is None and after.channel is not None:
-            # 一時的なボイスチャンネルを作成
-            category = after.channel.category
-            temp_channel = await category.create_voice_channel(f'Temporary Channel for {member.display_name}')
-            await member.move_to(temp_channel)
+        if after.channel is not None:
+            if after.channel.category == '👪-カジュアル・その他のモード':
+                # 一時的なボイスチャンネルを作成
+                category = after.channel.category
+                temp_channel = await category.create_voice_channel(f'Temporary Channel for {member.display_name}')
+                await member.move_to(temp_channel)
 
         # ユーザーがボイスチャンネルから退出した場合
-        elif before.channel is not None and after.channel is None:
+        elif not before.channel == after.channel:
             # 一時的なボイスチャンネルを削除
-            if before.channel.name.startswith('Temporary Channel for'):
+            if before.channel.name.startswith('Temporary Channel for') and len(before.channel.members) == 0:
                 await before.channel.delete()
 
 async def setup(bot):

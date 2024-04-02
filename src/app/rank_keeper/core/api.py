@@ -1,4 +1,5 @@
 import aiohttp
+import os
 
 
 class Rank:
@@ -11,9 +12,12 @@ class Rank:
 
     async def fetch_rank(self):
         async with aiohttp.ClientSession() as session:
+            header = {
+                'TRN-Api-Key': os.environ['API_KEY'],
+            }
             async with session.get(
-                f"https://api.tracer.gg/v1/players/{self.platform}/{self.name}/rank"
+                f"https://public-api.tracker.gg/v2/apex/standard/profile/{self.platform}/{self.name}/rank", headers=header
             ) as response:
                 data = await response.json()
 
-                self.rank = data["rank"]
+                self.rank = data['segments']['level']['rank']

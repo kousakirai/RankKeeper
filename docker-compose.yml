@@ -13,6 +13,8 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
+    networks:
+      - external
 
   voicevox_engine:
     image: voicevox/voicevox_engine:cpu-ubuntu20.04-latest
@@ -25,6 +27,8 @@ services:
       timeout: 10s
       retries: 3
       start_period: 30s
+    networks:
+      - external
 
   mysql:
     image: mysql:8.0
@@ -42,3 +46,10 @@ services:
       timeout: 10s
       retries: 3
       start_period: 30s
+    networks:
+      - external
+
+networks:
+  external:
+    driver: bridge
+    external: true

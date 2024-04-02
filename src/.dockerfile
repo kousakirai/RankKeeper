@@ -2,7 +2,7 @@ FROM python:3.9.19 as builder
 WORKDIR /bot
 RUN apt update -y && \
     apt upgrade -y
-COPY ./src/app/pyproject.toml  /bot/
+COPY ./app/pyproject.toml  /bot/
 RUN curl -sSL https://install.python-poetry.org | python3 -
 
 ENV PATH /root/.local/bin:$PATH
