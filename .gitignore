@@ -163,3 +163,5 @@ poetry.lock
 test/*.py
 src/app/alembic/versions/*.py
 db/
+
+src/app/rank_keeper/data/*.json

@@ -5,7 +5,7 @@ import os
 import discord
 from logging import basicConfig, INFO
 
-basicConfig(level=INFO)
+discord.utils.setup_logging()
 
 bot = RKCore(
     token=os.environ['BOT_TOKEN'],

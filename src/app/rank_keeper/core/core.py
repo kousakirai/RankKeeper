@@ -3,6 +3,12 @@ import traceback
 import discord
 from logging import getLogger
 from rank_keeper.core.voicevox import VoiceGenerator
+import aiofiles
+import json
+from pathlib import Path, _ignore_error as pathlib_ignore_error
+from typing import Union
+
+import aiofiles.os
 
 
 LOG = getLogger(__name__)
@@ -25,7 +31,7 @@ class RKCore(commands.Bot):
         LOG.info('CommandTree Setup Complete.')
 
     async def _load_cogs(self):
-        EXTENSIONS = ['cogs.keeper', 'cogs.tts', 'cogs.dev', 'cogs.role_panel']
+        EXTENSIONS = ['cogs.tts', 'cogs.dev', 'cogs.role_panel']
         for extension in EXTENSIONS:
             try:
                 await self.load_extension('rank_keeper.'+extension)
@@ -39,7 +45,10 @@ class RKCore(commands.Bot):
         LOG.info('All cogs were loaded.')
 
     async def on_ready(self):
-        LOG.info(f"{self.user.name} is online.")
+        LOG.info(f'Logged in as {self.user}')
+        LOG.info(f'Guilds: {len(self.guilds)}')
+        LOG.info(f'Users: {len(self.users)}')
+        LOG.info(f'discord.py version: {discord.__version__}')
 
     async def run(self):
         try:

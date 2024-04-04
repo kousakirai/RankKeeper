@@ -11,8 +11,8 @@ services:
     volumes:
       - ./src:/bot
     depends_on:
-      mysql:
-        condition: service_healthy
+      voicevox_engine:
+        condition: service_started
     networks:
       - external
 
@@ -21,31 +21,6 @@ services:
     ports:
       - '127.0.0.1:50021:50021'
     tty: true
-    healthcheck:
-      test: ping 127.0.0.1:50021
-      interval: 10s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
-    networks:
-      - external
-
-  mysql:
-    image: mysql:8.0
-    restart: always
-    env_file:
-      - .env
-    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-    volumes:
-      - ./db/data:/var/lib/mysql
-      - ./db/my.cnf:/etc/mysql/conf.d/my.cnf
-      - ./db/sql:/docker-entrypoint-initdb.d
-    healthcheck:
-      test: mysqladmin ping -h 127.0.0.1 -u$$MYSQL_USER -p$$MYSQL_PASSWORD
-      interval: 10s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
     networks:
       - external
 

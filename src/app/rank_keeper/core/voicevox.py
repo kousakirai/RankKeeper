@@ -1,6 +1,12 @@
 import aiohttp
 import asyncio
 import discord
+from logging import getLogger
+import time
+
+
+LOG = getLogger(__name__)
+
 
 class Speaker:
     "Voicevox上で使用可能な話者のクラス。使用可能なスタイルを切替可能。"
@@ -55,10 +61,15 @@ class VoiceGenerator:
 
     @classmethod
     async def init(cls, url) -> tuple[str, dict[str, Speaker]]:
-        valid_speakers = {}
-        async with aiohttp.ClientSession() as session:
-            async with session.get(f'{url}/speakers') as response:
-                for speaker in await response.json():
-                    valid_speakers[speaker["name"]] = Speaker(speaker["name"], speaker["styles"])
+        while True:
+            try:
+                valid_speakers = {}
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(f'{url}/speakers') as response:
+                        for speaker in await response.json():
+                            valid_speakers[speaker["name"]] = Speaker(speaker["name"], speaker["styles"])
+                return url, valid_speakers
 
-        return url, valid_speakers
+            except aiohttp.ClientConnectorError:
+                LOG.error(f'Failed to connect to {url}. Try to reconnect...')
+                time.sleep(5)

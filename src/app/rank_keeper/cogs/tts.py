@@ -1,7 +1,6 @@
 from discord.ext import commands
 from discord import app_commands, Interaction, VoiceChannel, VoiceClient, Message, FFmpegAudio
 from rank_keeper.core.voicevox import VoiceGenerator
-from rank_keeper.models.user import User
 from rank_keeper.core.core import RKCore
 from typing import Dict
 import asyncio
@@ -77,7 +76,6 @@ class TextToSpeech(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message: Message):
-        user = await User(message.author.id).get()
         read_msg = message.content
         if message.author.bot:
             return
@@ -107,9 +105,7 @@ class TextToSpeech(commands.Cog):
         # _hoge_置換
         read_msg = re.sub(r"_(.*?)_", r"\1", read_msg)
 
-        if not user:
-            user = await User.create(id=message.author.id)
-        voice = await self.bot.generator.generate_voice(read_msg, user.speaker)
+        voice = await self.bot.generator.generate_voice(read_msg)
         await self.audio_status[message.author.voice.channel.id].add_audio(voice)
 
 
