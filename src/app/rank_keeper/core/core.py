@@ -2,7 +2,6 @@ from discord.ext import commands
 import traceback
 import discord
 from logging import getLogger
-from rank_keeper.core.voicevox import VoiceGenerator
 import aiofiles
 import json
 from pathlib import Path, _ignore_error as pathlib_ignore_error
@@ -16,39 +15,34 @@ LOG = getLogger(__name__)
 
 class RKCore(commands.Bot):
     def __init__(self, token, prefix, intents):
-        super().__init__(
-            command_prefix=prefix,
-            intents=intents
-        )
+        super().__init__(command_prefix=prefix, intents=intents)
         self.token = token
 
     async def setup_hook(self):
         await self._load_cogs()
         await self.tree.sync()
         self.tree.copy_global_to(guild=discord.Object(811206817942208514))
-        url, speakers = await VoiceGenerator.init('external://voicevox_engine:50021')
-        self.generator = VoiceGenerator(url=url, valid_speakers=speakers)
-        LOG.info('CommandTree Setup Complete.')
+        LOG.info("CommandTree Setup Complete.")
 
     async def _load_cogs(self):
-        EXTENSIONS = ['cogs.tts', 'cogs.dev', 'cogs.role_panel']
+        EXTENSIONS = ["cogs.party", "cogs.dev", "cogs.role_panel"]
         for extension in EXTENSIONS:
             try:
-                await self.load_extension('rank_keeper.'+extension)
+                await self.load_extension("rank_keeper." + extension)
             except Exception as e:
                 traceback.print_exc()
-                LOG.error(f'Failed to load extension {extension}')
-                LOG.error(f'Error: {e}')
+                LOG.error(f"Failed to load extension {extension}")
+                LOG.error(f"Error: {e}")
             else:
-                LOG.info(f'Successfully loaded extension {extension}')
-        await self.load_extension('jishaku')
-        LOG.info('All cogs were loaded.')
+                LOG.info(f"Successfully loaded extension {extension}")
+        await self.load_extension("jishaku")
+        LOG.info("All cogs were loaded.")
 
     async def on_ready(self):
-        LOG.info(f'Logged in as {self.user}')
-        LOG.info(f'Guilds: {len(self.guilds)}')
-        LOG.info(f'Users: {len(self.users)}')
-        LOG.info(f'discord.py version: {discord.__version__}')
+        LOG.info(f"Logged in as {self.user}")
+        LOG.info(f"Guilds: {len(self.guilds)}")
+        LOG.info(f"Users: {len(self.users)}")
+        LOG.info(f"discord.py version: {discord.__version__}")
 
     async def run(self):
         try:

@@ -13,11 +13,12 @@ class Rank:
     async def fetch_rank(self):
         async with aiohttp.ClientSession() as session:
             header = {
-                'TRN-Api-Key': os.environ['API_KEY'],
+                "TRN-Api-Key": os.environ["API_KEY"],
             }
             async with session.get(
-                f"https://public-api.tracker.gg/v2/apex/standard/profile/{self.platform}/{self.name}/rank", headers=header
+                f"https://public-api.tracker.gg/v2/apex/standard/profile/{self.platform}/{self.name}/rank",
+                headers=header,
             ) as response:
                 data = await response.json()
 
-                self.rank = data['segments']['level']['rank']
+                self.rank = data["segments"]["level"]["rank"]
