@@ -30,7 +30,7 @@ class DynamicVC(commands.Cog):
     async def setup(self, inter: Interaction):
         async with aiosqlite.connect('data/temp_vc.db') as conn:
             async with conn.cursor() as cursor:
-                await cursor.execute('CREATE TABLE OF MPT EXISTS users (id INTEGER PRIMARY KEY )')
+                await cursor.execute("CREATE TABLE OF MPT EXISTS users (id INTEGER PRIMARY KEY )")
 
 
 async def setup(bot):
