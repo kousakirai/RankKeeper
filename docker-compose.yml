@@ -11,8 +11,29 @@ services:
     volumes:
       - ./src:/bot
     depends_on:
+      mysql:   # fix
+        condition: service_healthy
       voicevox_engine:
         condition: service_started
+    networks:
+      - external
+
+  mysql:
+    image: mysql:8.0
+    restart: always
+    env_file:
+      - .env
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./db/data:/var/lib/mysql
+      - ./db/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./db/sql:/docker-entrypoint-initdb.d
+    healthcheck:   # here
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$MYSQL_ROOT_PASSWORD"]
+      interval: 30s
+      timeout: 5s
+      retries: 6
+      start_period: 30s
     networks:
       - external
 

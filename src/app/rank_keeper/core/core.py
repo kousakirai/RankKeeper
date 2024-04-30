@@ -2,12 +2,6 @@ from discord.ext import commands
 import traceback
 import discord
 from logging import getLogger
-import aiofiles
-import json
-from pathlib import Path, _ignore_error as pathlib_ignore_error
-from typing import Union
-
-import aiofiles.os
 
 
 LOG = getLogger(__name__)
@@ -25,7 +19,7 @@ class RKCore(commands.Bot):
         LOG.info("CommandTree Setup Complete.")
 
     async def _load_cogs(self):
-        EXTENSIONS = ["cogs.party", "cogs.dev", "cogs.role_panel"]
+        EXTENSIONS = ['cogs.music', 'cogs.shuffle', 'cogs.dev']
         for extension in EXTENSIONS:
             try:
                 await self.load_extension("rank_keeper." + extension)
