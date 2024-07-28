@@ -16,7 +16,7 @@ services:
       voicevox_engine:
         condition: service_started
     networks:
-      - external
+      - lavalink
 
   mysql:
     image: mysql:8.0
@@ -35,17 +35,32 @@ services:
       retries: 6
       start_period: 30s
     networks:
-      - external
+      - lavalink
 
   voicevox_engine:
     image: voicevox/voicevox_engine:cpu-ubuntu20.04-latest
     ports:
       - '127.0.0.1:50021:50021'
     tty: true
+    restart: unless-stopped
     networks:
-      - external
+      - lavalink
+
+  lavalink:
+    image: ghcr.io/lavalink-devs/lavalink:4
+    container_name: lavalink
+    env_file:
+      - .env
+    ports:
+      - "80:80"
+    hostname: lavalink
+    restart: unless-stopped
+    volumes:
+      - ./application.yml:/opt/Lavalink/application.yml:ro
+    networks:
+      - lavalink
 
 networks:
-  external:
+  lavalink:
     driver: bridge
     external: true

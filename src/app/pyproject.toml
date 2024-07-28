@@ -9,7 +9,7 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = "3.9.19"
+python = "^3.10"
 discord-py = {extras = ["voice"], version = "^2.3.2"}
 python-dotenv = "^1.0.1"
 jishaku = "^2.5.2"
@@ -20,6 +20,7 @@ aiomysql = {git = "https://github.com/kousakirai/aiomysql.git"}
 google-api-python-client = "^2.127.0"
 cryptography = "^42.0.5"
 youtube-dl = {git = "https://github.com/kousakirai/youtube-dl.git"}
+wavelink = "^3.3.0"
 
 
 [tool.poetry.group.dev.dependencies]
