@@ -10,38 +10,38 @@ class CRUDBase:
         return result
 
 
-class Bump(CRUDBase):
-    def __init__(self, title: str):
-        self.title = title
+class rank(CRUDBase):
+    def __init__(self, name: int):
+        self.name = name
 
     async def get(self):
-        q = model.bump.select().where(self.title == model.playlist.c.title)
+        q = model.rank.select().where(self.name == model.rank.c.name)
         result = await self.execute(q)
         return await result.fetchone()
 
     async def set(self, **kwargs):
         q = (
-            model.bump.update(None)
-            .where(self.title == model.playlist.c.title)
+            model.rank.update(None)
+            .where(self.name == model.rank.c.name)
             .values(**kwargs)
         )
         await self.execute(q)
         return self
 
     async def delete(self):
-        q = model.bump.delete(None).where(self.title == model.playlist.c.title)
+        q = model.rank.delete(None).where(self.name == model.rank.c.name)
         await self.execute(q)
         return self
 
     @classmethod
     async def create(cls, **kwargs):
-        q = model.bump.insert(None).values(**kwargs)
-        bump = cls(kwargs['title'])
+        q = model.rank.insert(None).values(**kwargs)
+        rank = cls(kwargs['name'])
         await cls.execute(q)
-        return bump
+        return rank
 
     @staticmethod
     async def get_all(cls):
-        q = model.bump.select()
+        q = model.rank.select()
         results = await cls.execute(q)
         return await results.fetchall()

@@ -12,10 +12,9 @@ bump = Table(
     Column('bump_time', BigInteger(), nullable=True)
 )
 
-playlist = Table(
-    'playlist',
+rank = Table(
+    "rank",
     meta,
-    Column('title', String(50), nullable=False, primary_key=True),
-    Column('author', String(50), nullable=False),
-    Column('list', PickleType(), nullable=False)
+    Column("name", String(255), nullable=False, primary_key=True),
+    Column("role_id", BigInteger(), nullable=False),
 )
