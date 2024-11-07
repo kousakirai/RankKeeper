@@ -87,15 +87,15 @@ class Development(commands.GroupCog, name="dev"):
                 continue
 
             elif not set_roles.isdisjoint(become_bronze_roles) and len(set_roles.intersection(become_bronze_roles)) == 1:
-                await member.remove_roles(set_roles & become_bronze_roles)
+                await member.remove_roles([inter.guild.get_role(role) for role in list(set_roles & become_bronze_roles)])
                 await member.add_roles(rank_roles['bronze'])
 
             elif not set_roles.isdisjoint(become_silver_roles) and len(set_roles.intersection(become_silver_roles)) == 1:
-                await member.remove_roles(set_roles & become_silver_roles)
+                await member.remove_roles([inter.guild.get_role(role) for role in list(set_roles & become_silver_roles)])
                 await member.add_roles(rank_roles['silver'])
 
             elif not set_roles.isdisjoint(become_gold_roles) and len(set_roles.intersection(become_gold_roles)) == 1:
-                await member.remove_roles(set_roles & become_gold_roles)
+                await member.remove_roles([inter.guild.get_role(role) for role in list(set_roles & become_gold_roles)])
                 await member.add_roles(rank_roles['gold'])
 
             else:
