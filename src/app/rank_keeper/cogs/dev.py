@@ -61,7 +61,7 @@ class Development(commands.GroupCog, name="dev"):
         )
 
     @app_commands.command(name="rank_reset", description="スプリット(またはシーズン)切り替わり時にランクをリセット。※運営のみ")
-    @app_commands.checks.has_permissions(moderate_member=True)
+    @app_commands.checks.has_permissions(moderate_members=True)
     async def rank_reset(self, inter: Interaction):
         rank_roles = {
             'rookie': 1094479147922894928,
