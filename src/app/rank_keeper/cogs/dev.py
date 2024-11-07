@@ -75,7 +75,7 @@ class Development(commands.GroupCog, name="dev"):
         }
         members = inter.guild.members
         for member in members:
-            notion_channel = None
+            notion_channel = 829866679949328444
             role_ids = [role.id for role in member.roles]
             set_roles = set(role_ids)
             nothing_doing_roles = set([int(rank_roles['rookie']), int(rank_roles['bronze'])])
@@ -102,7 +102,8 @@ class Development(commands.GroupCog, name="dev"):
                 embed = Embed(title='処理失敗', description='ロールが重複している可能性があります。')
                 channel = inter.guild.get_channel(notion_channel)
                 await channel.send(embed)
-            asyncio.sleep(1)
+            asyncio.sleep(2)
+        embed = Embed(title='処理完了', description='ランクをリセットしました。')
 
 
 async def setup(bot):
