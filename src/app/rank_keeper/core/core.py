@@ -14,7 +14,7 @@ class RKCore(commands.Bot):
         super().__init__(command_prefix=prefix, intents=intents)
         self.token = token
         self.invites = None
-        self.log_channel = self.get_channel(829866679949328444)\
+        self.log_channel = self.get_channel(829866679949328444)
 
     async def setup_hook(self):
         nodes = [wavelink.Node(uri='http://lavalink:2333', password=os.environ.get('LAVALINK_SERVER_PASSWORD'))]

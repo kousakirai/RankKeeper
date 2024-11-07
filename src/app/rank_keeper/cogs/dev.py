@@ -76,32 +76,38 @@ class Development(commands.GroupCog, name="dev"):
         }
         members = inter.guild.members
         for member in members:
-            notion_channel = 829866679949328444
+            if member.bot:
+                continue
+
             role_ids = [role.id for role in member.roles]
             set_roles = set(role_ids)
             nothing_doing_roles = set([int(rank_roles['rookie']), int(rank_roles['bronze'])])
             become_bronze_roles = set([int(rank_roles['silver']), int(rank_roles['gold']), int(rank_roles['platinum'])])
             become_silver_roles = set([int(rank_roles['diamond'])])
             become_gold_roles = set([int(rank_roles['master']), int(rank_roles['predator'])])
+            if len(member.roles) == 0:
+                continue
 
-            if not set_roles.isdisjoint(nothing_doing_roles) and len(set_roles.intersection(nothing_doing_roles)) == 1:
+            elif not set_roles.isdisjoint(nothing_doing_roles) and len(set_roles.intersection(nothing_doing_roles)) == 1:
                 continue
 
             elif not set_roles.isdisjoint(become_bronze_roles) and len(set_roles.intersection(become_bronze_roles)) == 1:
                 await member.remove_roles(*[inter.guild.get_role(role) for role in list(set_roles & become_bronze_roles)])
                 await member.add_roles(inter.guild.get_role(rank_roles['bronze']))
+                print(f'{member.display_name} was removed silver or gold or platinum roles and added bronze role.')
 
             elif not set_roles.isdisjoint(become_silver_roles) and len(set_roles.intersection(become_silver_roles)) == 1:
                 await member.remove_roles(*[inter.guild.get_role(role) for role in list(set_roles & become_silver_roles)])
                 await member.add_roles(inter.guild.get_role(rank_roles['silver']))
+                print(f'{member.display_name} was removed diamond role and added silver role.')
 
             elif not set_roles.isdisjoint(become_gold_roles) and len(set_roles.intersection(become_gold_roles)) == 1:
                 await member.remove_roles(*[inter.guild.get_role(role) for role in list(set_roles & become_gold_roles)])
                 await member.add_roles(inter.guild.get_role(rank_roles['gold']))
+                print(f'{member.display_name} was removed master or predator role and added gold role.')
 
             else:
-                embed = Embed(title='処理失敗', description='ロールが重複している可能性があります。')
-                await self.bot.log_channel.send(embed=embed)
+                continue
             asyncio.sleep(1)
         embed = Embed(title='処理完了', description='ランクをリセットしました。')
         await inter.followup.send(embed=embed)
