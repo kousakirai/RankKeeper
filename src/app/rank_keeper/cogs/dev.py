@@ -63,6 +63,7 @@ class Development(commands.GroupCog, name="dev"):
     @app_commands.command(name="rank_reset", description="スプリット(またはシーズン)切り替わり時にランクをリセット。※運営のみ")
     @app_commands.checks.has_permissions(moderate_members=True)
     async def rank_reset(self, inter: Interaction):
+        await inter.response.defer()
         rank_roles = {
             'rookie': 1094479147922894928,
             'bronze': 839139993704202314,
@@ -88,23 +89,22 @@ class Development(commands.GroupCog, name="dev"):
 
             elif not set_roles.isdisjoint(become_bronze_roles) and len(set_roles.intersection(become_bronze_roles)) == 1:
                 await member.remove_roles(*[inter.guild.get_role(role) for role in list(set_roles & become_bronze_roles)])
-                await member.add_roles(rank_roles['bronze'])
+                await member.add_roles(inter.guild.get_role(rank_roles['bronze']))
 
             elif not set_roles.isdisjoint(become_silver_roles) and len(set_roles.intersection(become_silver_roles)) == 1:
                 await member.remove_roles(*[inter.guild.get_role(role) for role in list(set_roles & become_silver_roles)])
-                await member.add_roles(rank_roles['silver'])
+                await member.add_roles(inter.guild.get_role(rank_roles['silver']))
 
             elif not set_roles.isdisjoint(become_gold_roles) and len(set_roles.intersection(become_gold_roles)) == 1:
                 await member.remove_roles(*[inter.guild.get_role(role) for role in list(set_roles & become_gold_roles)])
-                await member.add_roles(rank_roles['gold'])
+                await member.add_roles(inter.guild.get_role(rank_roles['gold']))
 
             else:
                 embed = Embed(title='処理失敗', description='ロールが重複している可能性があります。')
-                channel = inter.guild.get_channel(notion_channel)
-                await channel.send(embed)
-            asyncio.sleep(2)
+                await self.bot.log_channel.send(embed=embed)
+            asyncio.sleep(1)
         embed = Embed(title='処理完了', description='ランクをリセットしました。')
-
+        await inter.followup.send(embed=embed)
 
 async def setup(bot):
     await bot.add_cog(Development(bot))
