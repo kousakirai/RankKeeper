@@ -108,7 +108,7 @@ class Development(commands.GroupCog, name="dev"):
 
             else:
                 continue
-            asyncio.sleep(1)
+            await asyncio.sleep(1)
         embed = Embed(title='処理完了', description='ランクをリセットしました。')
         await inter.followup.send(embed=embed)
 
